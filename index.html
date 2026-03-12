@@ -21,24 +21,22 @@
       margin: 0 auto;
     }
 
-    .video-mock {
-      position: relative;
-      width: 640px;
-      height: 360px;
-      background: #000;
-      margin: 1rem auto;
-      border: 4px solid #333;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-
     .controls {
       margin: 0.5rem 0;
       text-align: center;
     }
 
+    .control-row {
+      margin: 0.5rem 0;
+    }
+
     .controls input[type=range] {
       width: 60%;
-      margin-top: 0.2rem;
+      margin-left: 0.5rem;
+    }
+
+    .controls input[type=file] {
+      margin-left: 0.5rem;
     }
 
     .video-mock {
@@ -49,6 +47,7 @@
       margin: 1rem auto;
       border: 4px solid #333;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: width 0.1s, height 0.1s;
     }
 
     .video-mock img {
@@ -92,12 +91,24 @@
     </p>
 
     <div class="controls">
-      <label for="font-size">文字サイズ: <span id="font-size-label">19px</span></label>
-      <input type="range" id="font-size" min="12" max="72" step="1" value="19">
-      <br/>
-      <label for="image-input">画像を選択:</label>
-      <input type="file" id="image-input" accept="image/*">
+      <div class="control-row">
+        <label for="video-width">幅: <span id="width-label">640</span>px</label>
+        <input type="range" id="video-width" min="320" max="1920" step="10" value="640">
+      </div>
+      <div class="control-row">
+        <label for="video-height">高さ: <span id="height-label">360</span>px</label>
+        <input type="range" id="video-height" min="180" max="1080" step="10" value="360">
+      </div>
+      <div class="control-row">
+        <label for="font-size">文字サイズ: <span id="font-size-label">19px</span></label>
+        <input type="range" id="font-size" min="12" max="72" step="1" value="19">
+      </div>
+      <div class="control-row">
+        <label for="image-input">画像を選択:</label>
+        <input type="file" id="image-input" accept="image/*">
+      </div>
     </div>
+
 
     <div class="video-mock" id="video-mock">
       <img id="sample-img" src="https://via.placeholder.com/640x360.png?text=Sample+Video" alt="sample video" />
@@ -113,6 +124,13 @@
     const subtitle = document.getElementById('subtitle');
     const fontSizeControl = document.getElementById('font-size');
     const fontSizeLabel = document.getElementById('font-size-label');
+    const widthControl = document.getElementById('video-width');
+    const heightControl = document.getElementById('video-height');
+    const widthLabel = document.getElementById('width-label');
+    const heightLabel = document.getElementById('height-label');
+    const videoMock = document.getElementById('video-mock');
+    const imageInput = document.getElementById('image-input');
+    const sampleImg = document.getElementById('sample-img');
 
     function updateSubtitle() {
       const lines = input.value.split('\n');
@@ -125,12 +143,21 @@
       fontSizeLabel.textContent = size;
     }
 
+    function updateVideoSize() {
+      const width = widthControl.value;
+      const height = heightControl.value;
+      videoMock.style.width = width + 'px';
+      videoMock.style.height = height + 'px';
+      widthLabel.textContent = width;
+      heightLabel.textContent = height;
+    }
+
     input.addEventListener('input', updateSubtitle);
     fontSizeControl.addEventListener('input', updateFontSize);
+    widthControl.addEventListener('input', updateVideoSize);
+    heightControl.addEventListener('input', updateVideoSize);
 
     // image input handler
-    const imageInput = document.getElementById('image-input');
-    const sampleImg = document.getElementById('sample-img');
     imageInput.addEventListener('change', () => {
       const file = imageInput.files[0];
       if (file) {
