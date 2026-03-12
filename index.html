@@ -92,8 +92,8 @@
     </p>
 
     <div class="controls">
-      <label for="font-size">文字サイズ: <span id="font-size-label">1.2rem</span></label>
-      <input type="range" id="font-size" min="0.6" max="3" step="0.1" value="1.2">
+      <label for="font-size">文字サイズ: <span id="font-size-label">19px</span></label>
+      <input type="range" id="font-size" min="12" max="72" step="1" value="19">
     </div>
 
     <div class="video-mock" id="video-mock">
@@ -117,7 +117,7 @@
     }
 
     function updateFontSize() {
-      const size = fontSizeControl.value + 'rem';
+      const size = fontSizeControl.value + 'px';
       subtitle.style.fontSize = size;
       fontSizeLabel.textContent = size;
     }
