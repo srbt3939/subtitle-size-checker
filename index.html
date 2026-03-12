@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Subtitle Size Checker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f4f4f4;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .video-mock {
+      position: relative;
+      width: 640px;
+      height: 360px;
+      background: #000;
+      margin: 1rem auto;
+      border: 4px solid #333;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .subtitle {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 0.5rem;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 1.2rem;
+      text-align: center;
+      word-wrap: break-word;
+    }
+
+    textarea {
+      width: 100%;
+      height: 4rem;
+      font-size: 1rem;
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    .instructions {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Web Subtitle Size Checker</h1>
+    <p class="instructions">
+      画面サイズは640×360。下の入力欄にキャプションを入力すると、擬似映像上に字幕が表示されます。
+      MediaConvertでの出力サイズ感の確認にお使いください。
+    </p>
+
+    <div class="video-mock" id="video-mock">
+      <div class="subtitle" id="subtitle">ここに字幕が表示されます</div>
+    </div>
+
+    <textarea id="input" placeholder="ここに字幕テキストを入力
+（改行も反映されます）"></textarea>
+  </div>
+
+  <script>
+    const input = document.getElementById('input');
+    const subtitle = document.getElementById('subtitle');
+
+    function updateSubtitle() {
+      const lines = input.value.split('\n');
+      subtitle.textContent = lines.join('\n');
+    }
+
+    input.addEventListener('input', updateSubtitle);
+  </script>
+</body>
+</html>
