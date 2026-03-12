@@ -50,6 +50,13 @@
       margin-left: 0.5rem;
     }
 
+    .controls select,
+    .controls input[type=text] {
+      margin-left: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+    }
+
     .video-mock {
       position: relative;
       width: 640px;
@@ -122,6 +129,36 @@
         <input type="range" id="font-size" min="12" max="72" step="1" value="19">
       </div>
       <div class="control-row">
+        <label for="font-family">フォント: </label>
+        <select id="font-family">
+          <option value="sans-serif">sans-serif</option>
+          <option value="serif">serif</option>
+          <option value="monospace">monospace</option>
+          <option value="'Arial', sans-serif">Arial</option>
+          <option value="'Helvetica', sans-serif">Helvetica</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="'Courier New', monospace">Courier New</option>
+          <option value="'Verdana', sans-serif">Verdana</option>
+          <option value="'Georgia', serif">Georgia</option>
+          <optgroup label="Google Fonts">
+            <option value="google:Roboto">Roboto</option>
+            <option value="google:Open Sans">Open Sans</option>
+            <option value="google:Lato">Lato</option>
+            <option value="google:Montserrat">Montserrat</option>
+            <option value="google:Playfair Display">Playfair Display</option>
+            <option value="google:Poppins">Poppins</option>
+            <option value="google:Merriweather">Merriweather</option>
+            <option value="google:Ubuntu">Ubuntu</option>
+            <option value="google:Noto Sans JP">Noto Sans JP</option>
+            <option value="google:Noto Serif JP">Noto Serif JP</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="control-row">
+        <label for="custom-font">カスタムフォント名:</label>
+        <input type="text" id="custom-font" placeholder="例: 'Comic Sans MS', cursive または google:Quattrocento Sans">
+      </div>
+      <div class="control-row">
         <label for="image-input">画像を選択:</label>
         <input type="file" id="image-input" accept="image/*">
       </div>
@@ -149,6 +186,8 @@
     const videoMock = document.getElementById('video-mock');
     const imageInput = document.getElementById('image-input');
     const sampleImg = document.getElementById('sample-img');
+    const fontFamilySelect = document.getElementById('font-family');
+    const customFontInput = document.getElementById('custom-font');
 
     function updateSubtitle() {
       const lines = input.value.split('\n');
@@ -160,6 +199,44 @@
       fontSizeControl.value = size;
       subtitle.style.fontSize = size + 'px';
       fontSizeLabel.textContent = size + 'px';
+    }
+
+    function updateFontFamily() {
+      const customFont = customFontInput.value.trim();
+      let fontValue = fontFamilySelect.value;
+      
+      if (customFont) {
+        fontValue = customFont;
+      }
+
+      // Google Fonts の処理
+      if (fontValue.startsWith('google:')) {
+        const googleFontName = fontValue.substring(7); // 'google:' を削除
+        loadGoogleFont(googleFontName);
+        subtitle.style.fontFamily = `'${googleFontName}', sans-serif`;
+      } else {
+        // Google Fonts link を削除
+        const existing = document.getElementById('google-font-link');
+        if (existing) existing.remove();
+        subtitle.style.fontFamily = fontValue;
+      }
+    }
+
+    function loadGoogleFont(fontName) {
+      // フォント名をクエリパラメータ形式に変換（スペースをプラスに）
+      const familyParam = fontName.replace(/\s+/g, '+');
+      const url = `https://fonts.googleapis.com/css2?family=${familyParam}&display=swap&subset=latin,latin-ext,cyrillic,greek,vietnamese,hiragana,katakana,chinese-simplified,chinese-traditional,korean,hebrew,arabic,devanagari,thai`;
+      
+      // 既存の link タグを削除（重複を避けるため）
+      const existing = document.getElementById('google-font-link');
+      if (existing) existing.remove();
+      
+      // 新しい link タグを head に追加
+      const link = document.createElement('link');
+      link.id = 'google-font-link';
+      link.rel = 'stylesheet';
+      link.href = url;
+      document.head.appendChild(link);
     }
 
     function updateVideoSize() {
@@ -177,6 +254,8 @@
     fontSizeControl.addEventListener('input', updateFontSize);
     widthControl.addEventListener('input', updateVideoSize);
     heightControl.addEventListener('input', updateVideoSize);
+    fontFamilySelect.addEventListener('change', updateFontFamily);
+    customFontInput.addEventListener('input', updateFontFamily);
 
     // image input handler
     imageInput.addEventListener('change', () => {
