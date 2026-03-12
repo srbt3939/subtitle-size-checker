@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Web Subtitle Size Checker</title>
   <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: sans-serif;
       padding: 1rem;
@@ -60,13 +71,18 @@
     .subtitle {
       position: absolute;
       bottom: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       padding: 0.5rem;
+      margin: 0;
       background: rgba(0,0,0,0.6);
       color: #fff;
       font-size: 1.2rem;
       text-align: center;
       word-wrap: break-word;
+      line-height: 1.4;
+      text-rendering: optimizeLegibility;
     }
 
     textarea {
@@ -75,6 +91,8 @@
       font-size: 1rem;
       padding: 0.5rem;
       box-sizing: border-box;
+      font-family: monospace;
+      line-height: 1.5;
     }
 
     .instructions {
@@ -138,14 +156,17 @@
     }
 
     function updateFontSize() {
-      const size = fontSizeControl.value + 'px';
-      subtitle.style.fontSize = size;
-      fontSizeLabel.textContent = size;
+      const size = Math.round(parseFloat(fontSizeControl.value));
+      fontSizeControl.value = size;
+      subtitle.style.fontSize = size + 'px';
+      fontSizeLabel.textContent = size + 'px';
     }
 
     function updateVideoSize() {
-      const width = widthControl.value;
-      const height = heightControl.value;
+      const width = Math.round(parseFloat(widthControl.value));
+      const height = Math.round(parseFloat(heightControl.value));
+      widthControl.value = width;
+      heightControl.value = height;
       videoMock.style.width = width + 'px';
       videoMock.style.height = height + 'px';
       widthLabel.textContent = width;
