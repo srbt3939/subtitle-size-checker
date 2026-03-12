@@ -94,6 +94,9 @@
     <div class="controls">
       <label for="font-size">文字サイズ: <span id="font-size-label">19px</span></label>
       <input type="range" id="font-size" min="12" max="72" step="1" value="19">
+      <br/>
+      <label for="image-input">画像を選択:</label>
+      <input type="file" id="image-input" accept="image/*">
     </div>
 
     <div class="video-mock" id="video-mock">
@@ -124,6 +127,20 @@
 
     input.addEventListener('input', updateSubtitle);
     fontSizeControl.addEventListener('input', updateFontSize);
+
+    // image input handler
+    const imageInput = document.getElementById('image-input');
+    const sampleImg = document.getElementById('sample-img');
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          sampleImg.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
     // initialize font size label
     updateFontSize();
